@@ -1,1 +1,1 @@
-web: gunicorn flux_core.wsgi:application
+web: gunicorn --bind 0.0.0.0:$PORT flux_core.wsgi:application
