@@ -16,4 +16,4 @@ RUN python manage.py collectstatic --noinput || true
 
 EXPOSE 8000
 
-CMD ["sh", "-c", "python manage.py migrate --noinput && gunicorn --bind 0.0.0.0:$PORT flux_core.wsgi:application"]
+CMD ["sh", "-c", "python manage.py migrate --noinput && python manage.py seed_admin && gunicorn --bind 0.0.0.0:$PORT flux_core.wsgi:application"]
