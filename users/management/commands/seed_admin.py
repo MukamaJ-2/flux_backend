@@ -10,15 +10,25 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         email = 'mukamajoseph010@gmail.com'
         password = 'Flux11.11'
+        username = 'mukamajoseph010'
 
-        if User.objects.filter(email=email).exists():
-            self.stdout.write(self.style.WARNING(
-                f'Admin account already exists: {email}'
+        user = User.objects.filter(email=email).first()
+        if user is None:
+            user = User.objects.filter(username=username).first()
+
+        if user:
+            user.set_password(password)
+            user.role = 'sysadmin'
+            user.must_change_password = False
+            user.is_active = True
+            user.save(update_fields=['password', 'role', 'must_change_password', 'is_active'])
+            self.stdout.write(self.style.SUCCESS(
+                f'Sysadmin password reset: {email}'
             ))
             return
 
         User.objects.create_user(
-            username='mukamajoseph010',
+            username=username,
             email=email,
             password=password,
             first_name='Joseph',
@@ -29,5 +39,5 @@ class Command(BaseCommand):
         )
 
         self.stdout.write(self.style.SUCCESS(
-            f'✅ Sysadmin account created successfully: {email}'
+            f'Sysadmin account created successfully: {email}'
         ))
