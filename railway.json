@@ -5,7 +5,7 @@
     "buildEnvironment": "V3"
   },
   "deploy": {
-    "startCommand": "python manage.py migrate --noinput && gunicorn --bind 0.0.0.0:$PORT flux_core.wsgi:application",
+    "startCommand": "python manage.py migrate --noinput && python manage.py seed_admin && gunicorn --bind 0.0.0.0:$PORT flux_core.wsgi:application",
     "runtime": "V2",
     "numReplicas": 1,
     "sleepApplication": false,
