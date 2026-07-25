@@ -3,6 +3,7 @@ from datetime import datetime
 
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
+from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
@@ -200,11 +201,9 @@ class RecordViewSet(viewsets.ModelViewSet):
         try:
             group = Group.objects.get(id=group_id)
         except Group.DoesNotExist:
-            from rest_framework.exceptions import ValidationError
             raise ValidationError({'group': 'Invalid group.'})
 
         if not can_handle_finance(self.request.user, group):
-            from rest_framework.exceptions import PermissionDenied
             raise PermissionDenied('Only finance roles can directly create records.')
 
         # Resolve member — if 'member' field not given, use the request user
